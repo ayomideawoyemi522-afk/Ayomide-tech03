@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Hookup & Olosho 🔥</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif; }
+    body {
+      background: linear-gradient(135deg, #1a0033, #330066);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background: rgba(0,0,0,0.7);
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      z-index: 100;
+    }
+    nav a {
+      color: #ff00aa;
+      margin: 0 15px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .login-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 120px 20px 60px;
+    }
+    .login-box {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
+      padding: 50px 40px;
+      border-radius: 25px;
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(255, 0, 170, 0.2);
+    }
+    .login-box h1 {
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #ff00aa, #ff66cc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .login-box p {
+      color: #ddd;
+      margin-bottom: 30px;
+    }
+    input {
+      width: 100%;
+      padding: 16px;
+      margin: 12px 0;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,0,170,0.3);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.05rem;
+    }
+    input::placeholder { color: #aaa; }
+    .btn {
+      width: 100%;
+      background: #ff00aa;
+      color: white;
+      padding: 16px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 15px 0;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #ff66cc;
+      transform: scale(1.03);
+    }
+    .google-btn {
+      background: #fff;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .divider {
+      margin: 25px 0;
+      color: #777;
+      position: relative;
+    }
+    .divider::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 1px;
+      background: #444;
+      top: 50%;
+      left: 0;
+    }
+    .divider span {
+      background: rgba(0,0,0,0.6);
+      padding: 0 15px;
+    }
+    .links {
+      margin-top: 20px;
+    }
+    .links a {
+      color: #ff66cc;
+      text-decoration: none;
+    }
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #000;
+      font-size: 0.9rem;
+    }
+    .error { color: #ff6666; margin: 10px 0; font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Hookup & Olosho</h2>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <div class="login-container">
+    <div class="login-box">
+      <h1>Welcome Back 🔥</h1>
+      <p>Sign in to continue the vibe</p>
+
+      <div id="error" class="error"></div>
+
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <button class="btn" onclick="loginWithEmail()">Login</button>
+
+      <div class="divider"><span>OR</span></div>
+
+      <button class="btn google-btn" onclick="loginWithGoogle()">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/2048px-Google_%22G%22_logo.svg.png" width="22" height="22" alt="Google">
+        Continue with Google
+      </button>
+
+      <div class="links">
+        <p>Don't have an account? <a href="register.html">Sign Up</a></p>
+        <p><a href="#">Forgot Password?</a></p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Hookup & Olosho • All vibes only</p>
+  </footer>
+
+  <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyChWiV7uX7EwVkR6gdxP4s8JxInJDd0BMc",
+      authDomain: "ayomide-tech.firebaseapp.com",
+      projectId: "ayomide-tech",
+      storageBucket: "ayomide-tech.firebasestorage.app",
+      messagingSenderId: "1068609858454",
+      appId: "1:1068609858454:web:bd3cd9559340b18ab98bb7",
+      measurementId: "G-L8LRTBXQ13"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Login with Email & Password
+    function loginWithEmail() {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('error');
+
+      errorDiv.textContent = '';
+
+      if (!email || !password) {
+        errorDiv.textContent = 'Please enter email and password';
+        return;
+      }
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+          alert('Login successful! 🔥 Welcome back baby');
+          // Redirect to main app or dashboard
+          window.location.href = "index.html"; // Change to your dashboard later
+        })
+        .catch((error) => {
+          errorDiv.textContent = error.message;
+        });
+    }
+
+    // Login with Google
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          alert('Google login successful! 🔥');
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          document.getElementById('error').textContent = error.message;
+        });
+    }
+
+    // Allow pressing Enter to login
+    document.getElementById('password').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') loginWithEmail();
+    });
+  </script>
+</body>
+  </html>
