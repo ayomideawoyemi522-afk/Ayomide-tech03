@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - Hookup & Olosho</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family: 'Segoe UI', sans-serif; }
+    body { background: linear-gradient(135deg, #1a0033, #330066); color: #fff; min-height: 100vh; }
+    header {
+      background: rgba(0,0,0,0.7); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: fixed; width: 100%; z-index: 100;
+    }
+    nav a {
+      color: #ff00aa; margin: 0 15px; text-decoration: none; font-weight: bold;
+    }
+    .form-container {
+      padding: 120px 10% 80px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    form {
+      background: rgba(0,0,0,0.5); padding: 40px; border-radius: 20px;
+    }
+    input, textarea {
+      width: 100%; padding: 15px; margin: 15px 0; background: #222; border: none; border-radius: 10px; color: white;
+    }
+    .btn {
+      background: #ff00aa; color: white; padding: 15px 40px; border: none; border-radius: 50px; font-size: 1.1rem; cursor: pointer; width: 100%;
+    }
+    footer {
+      text-align: center; padding: 30px; background: #000;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2>Hookup & Olosho</h2>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <div class="form-container">
+    <h1 style="text-align:center; margin-bottom:30px; color:#ff00aa;">Get In Touch</h1>
+    <form onsubmit="alert('Message sent! We go reply sharp sharp 🔥'); return false;">
+      <input type="text" placeholder="Your Name" required>
+      <input type="email" placeholder="Email Address" required>
+      <textarea rows="6" placeholder="Your Message..." required></textarea>
+      <button type="submit" class="btn">Send Message</button>
+    </form>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Hookup & Olosho • All rights reserved</p>
+  </footer>
+</body>
+</html>
